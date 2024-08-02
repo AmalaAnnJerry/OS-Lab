@@ -7,8 +7,10 @@ printf("Enter the size of queue");
 scanf("%d",&n);
 int queue[n+1];
 printf("Enter the queue");
-for(int i=1;i<=n;i++){
-scanf("%d",&queue[i]);}
+for(int i=1;i<=n;i++)
+{
+scanf("%d",&queue[i]);
+}
 printf("Enter the initial head position:");
 scanf("%d",&queue[0]);
 printf("\n Movement of cylinder\n");
