@@ -1,36 +1,67 @@
 #include<stdio.h>
+
 void main()
+
 {
-float avgwt,avgtt;
+
+int n;
+
 int twt=0,tat=0;
-int i;
-int A[]={1,2,3};
-int n=sizeof A/sizeof A[0];
-int AT[]={1,2,3};
-int BT[]={10,5,8};
-int Wt[n];
-Wt[0]=0;
-for(i=1;i<n;i++)
+
+printf("Enter the number of process : ");
+
+scanf("%d",&n);
+
+int a[n][6];
+
+//0-process id ,1-at,2-bt,3-completion time,4-tat,5-waiting time
+
+for(int i=0;i<n;i++)
+
 {
-Wt[i]=Wt[i-1]+BT[i-1];
+
+printf("\nProcess ID :"); scanf("%d",&a[i][0]);
+
+printf("A.T of Process.%d :",a[i][0]); scanf("%d",&a[i][1]);
+
+printf("B.T of Process.%d :",a[i][0]); scanf("%d",&a[i][2]);
+
 }
-printf("Process\t   ArrivalTime\t   BurstTime\t  WT\t  TAT\n");
-for(i=0;i<n;i++)
+
+a[0][3]=a[0][1]+a[0][2]; //completion time of 1st process
+
+a[0][4]=a[0][3]-a[0][1]; //tat of 1st process
+
+a[0][5]=a[0][4]-a[0][2]; //waiting time of 1st process
+
+for(int i=1;i<n;i++)
+
 {
-printf("%d\t\t",A[i]);
-printf("%d\t\t",AT[i]);
-printf("%d\t\t",BT[i]);
-printf("%d\t\t",Wt[i]);
-printf("%d\t\t",Wt[i]+BT[i]);
-printf("\n");
-twt=twt+Wt[i];
-tat=tat+(Wt[i]+BT[i]);
-}
-avgwt=(float)twt/n;
-avgtt=(float)tat/n;
-printf("Average waiting time: %f\n",avgwt);
-printf("Average turn around time: %f",avgtt);
+
+a[i][3]=a[i-1][3]+a[i][2]; //completion time of ith process
+
+a[i][4]=a[i][3]-a[i][1]; //tat of ith process
+
+a[i][5]=a[i][4]-a[i][2]; //waiting time of ith process
+
 }
 
+printf("\nP.No.\tAT\t BT\t TAT\t WT");
 
+for (int i=0; i<n; i++)
 
+{
+
+printf("\n%d\t\t%d\t%d\t%d\t%d", a[i][0], a[i][1], a[i][2], a[i][4], a[i][5]);
+
+tat+=a[i][4];
+
+twt+=a[i][5];
+
+}
+
+printf ("\nAverage Turnaround time = %f", tat/(float)n);
+
+printf ("\nAverage Waiting time = %f", twt/(float)n);
+
+}
