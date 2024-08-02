@@ -1,69 +1,117 @@
-#include <stdio.h>
- 
-void swap(int *a,int *b)
-{
-    int temp=*a;
-    *a=*b;
-    *b=temp;
-}
-int main()
-{
-    int n;
-    printf("Enter Number of Processes: ");
-    scanf("%d",&n);
+#include<stdio.h>
 
-    int burst[n],priority[n],index[n];
-    for(int i=0;i<n;i++)
-    {
-        printf("Enter Burst Time and Priority Value for Process %d: ",i+1);
-        scanf("%d %d",&burst[i],&priority[i]);
-        index[i]=i+1;
-    }
-    for(int i=0;i<n;i++)
-    {
-        int temp=priority[i],m=i;
- 
-        for(int j=i;j<n;j++)
-        {
-            if(priority[j] > temp)
-            {
-                temp=priority[j];
-                m=j;
-            }
-        }
- 
-        swap(&priority[i], &priority[m]);
-        swap(&burst[i], &burst[m]);
-        swap(&index[i],&index[m]);
-    }
- 
-    int t=0;
- 
-    printf("Order of process Execution is\n");
-    for(int i=0;i<n;i++)
-    {
-        printf("P%d is executed from %d to %d\n",index[i],t,t+burst[i]);
-        t+=burst[i];
-    }
-    printf("\n");
-    printf("Process Id\tBurst Time\tWait Time\n");
-    int wait_time=0;
-    int total_wait_time = 0;
-    for(int i=0;i<n;i++)
-    {
-        printf("P%d\t\t%d\t\t%d\n",index[i],burst[i],wait_time);
-        total_wait_time += wait_time;
-        wait_time += burst[i];
-    }
-    
-    float avg_wait_time = (float) total_wait_time / n;
-    printf("Average waiting time is %f\n", avg_wait_time);
-    
-    int total_Turn_Around = 0;
-    for(int i=0; i < n; i++){
-        total_Turn_Around += burst[i];
-    }
-    float avg_Turn_Around = (float) total_Turn_Around / n;
-    printf("Average TurnAround Time is %f",avg_Turn_Around);
-    return 0;
+void swap (int *a, int *b)
+
+{
+
+int temp;
+
+temp = *a;
+
+*a = *b;
+
+*b = temp;
+
+}
+
+int main()
+
+{
+
+int n, cmpt;
+
+float twt = 0, ttat = 0;
+
+printf ("\nEnter how many processes: ");
+
+scanf ("%d", &n);
+
+int a[n][6];
+
+printf ("\n-Enter arrival time, burst time and priority of each process:-");
+
+for (int i=0; i<n; i++)
+
+{
+
+printf ("\nProcess ID: ");
+
+scanf ("%d", &a[i][0]);
+
+printf ("A.T of process.%d: ", a[i][0]);
+
+scanf ("%d", &a[i][1]);
+
+printf ("B.T of process.%d: ", a[i][0]);
+
+scanf ("%d", &a[i][2]);
+
+printf ("Priority of process.%d: ", a[i][0]);
+
+scanf ("%d", &a[i][5]);
+
+}
+
+for (int i=0; i<n; i++)
+
+{
+
+for (int j=0; j<n-i-1; j++)
+
+{
+
+if (a[j][1]>a[j+1][1])
+
+{
+
+swap (&a[j][0], &a[j+1][0]);
+
+swap (&a[j][1], &a[j+1][1]);
+
+swap (&a[j][2], &a[j+1][2]);
+
+swap (&a[j][5], &a[j+1][5]);
+
+}
+if (a[j][1]==a[j+1][1] && a[j][5]>a[j+1][5])
+{
+swap (&a[j][0], &a[j+1][0]);
+swap (&a[j][1], &a[j+1][1]);
+swap (&a[j][2], &a[j+1][2]);
+swap (&a[j][5], &a[j+1][5]);
+}
+}
+}
+a[0][3] = a[0][1];
+a[0][4] = a[0][2] - a[0][1];
+cmpt = a[0][4];
+twt+=a[0][3];
+ttat+=a[0][4];
+for (int i=1; i<n; i++)
+{
+int min = a[i][5];
+for (int j=i+1; j<n; j++)
+{
+if (min>a[j][5] && a[j][1]<=cmpt)
+{
+min = a[j][5];
+swap (&a[i][0], &a[j][0]);
+swap (&a[i][1], &a[j][1]);
+swap (&a[i][2], &a[j][2]);
+swap (&a[i][5], &a[j][5]);
+}
+}
+a[i][3] = cmpt - a[i][1];
+twt+=a[i][3];
+cmpt+=a[i][2];
+a[i][4] = cmpt - a[i][1];
+ttat+=a[i][4];
+}
+printf("\nP.No.\tAT\tBT\tP.R\tTAT\tWT");
+for (int i=0; i<n; i++)
+{
+printf("\n%d\t%d\t%d\t%d\t%d\t%d", a[i][0], a[i][1], a[i][2], a[i][5], a[i][4], a[i][3]);
+}
+printf ("\nAverage Turnaround time = %f", ttat/n);
+printf ("\nAverage Waiting time = %f", twt/n);
 }
